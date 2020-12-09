@@ -23,25 +23,27 @@
     function($, confirmation) {
         $('#btn_delete').on('click', function (e){
             e.preventDefault();
-           // var formKey = "<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>";
-            var formKey = jQuery("[name='form_key']").val();
+           // var formKey = jQuery("[name='form_key']").val();
             confirmation({
                 title: 'Confirmar exclusão',
                 content: 'Todos os itens desta mesma Ordem de Serviço serão excluidos!',
                 actions: {
                     confirm: function () {
-                        $.ajax({
-                            showLoader: true,
-                            url: "UpdatePost",
-                            data:{form_key: formKey, update_cart_action: 'delete_items'},
-                            type: "POST",
-                            success: function (data) {
+                        $("#myForm").submit(function (){
+                            var $form = $(this);
+                            $.ajax({
+                                showLoader: true,
+                                url: "UpdatePost",
+                                data:$form.serialize(),
+                                type: "POST",
+                                success: function (data) {
                                     alert('Record Saved successfully');
                                 },
-                            error: function (error) {
-                                console.log(error);
-                                alert('Error');
+                                error: function (error) {
+                                    console.log(error);
+                                    alert('Error');
                                 }
+                            });
                         });
                     },
                     cancel: function () {
@@ -57,7 +59,7 @@
 
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
 <?php echo $block->getChildHtml('form_before') ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getUrl('checkout/cart/updatePost') ?>"
+<form id="myForm" action="<?php /* @escapeNotVerified */ echo $block->getUrl('checkout/cart/updatePost') ?>"
           method="post"
           id="form-validate"
           data-mage-init='{"validation":{}}'
@@ -108,7 +110,7 @@
                 class="action update">
             <span><?php /* @escapeNotVerified */ echo __('Update Shopping Cart'); ?></span>
         </button>
-        <input type="hidden" name="form_key" value="<?php echo $block->getFormKey();?> id="update_cart_action_container" data-cart-item-update=""/>
+        <input type="hidden" name="form_key" value="" id="update_cart_action_container" data-cart-item-update=""/>
         <!--The below button is one of the requirement of our Extension. This will create one button in checkout form page at bottom right side -->
         <button  id="btn_delete" class="action update" type="submit" name="update_cart_action" data-cart-item-update="" value="delete_items" title="Delete Shopping Cart"><span><?php echo __('Delete Multiple Items');?></span></button>
     </div>
