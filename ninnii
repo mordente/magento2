@@ -1,0 +1,29 @@
+    require([
+            'jquery',
+            'Magento_Ui/js/modal/confirm'
+        ],
+    $('#btn_delete').confirm({
+        title: $.mage.__('Confirmar exclusão'),
+        content: 'Todos os itens desta mesma Ordem de Serviço serão exlcuidos!'
+        actions: {
+            confirm: function(){
+                $.ajax({
+                    showLoader: true,
+                    url: "UpdatePost",
+                    data:{},
+                    type: "POST",
+                    success: function (data) {
+                        alert('Record Saved successfully');
+                    },
+                    error: function (error) {
+                        alert('Error');
+                    }
+                });
+            },
+            cancel: function(){
+                alert("Cancelou");
+            },
+            always: function(){}
+        }
+    });
+    )
