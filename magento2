@@ -1,27 +1,26 @@
-        $('#btn_delete').on('click', function (e){
-            //e.preventDefault();
-            $('#btn_delete').confirm({
-                title: $.mage.__('Confirmar exclusão'),
-                content: 'Todos os itens desta mesma Ordem de Serviço serão exlcuidos!',
-                actions: {
-                    confirm: function(){
-                        $.ajax({
-                            showLoader: true,
-                            url: "UpdatePost",
-                            data:{},
-                            type: "POST",
-                            success: function (data) {
-                                alert('Record Saved successfully');
-                            },
-                            error: function (error) {
-                                alert('Error');
-                            }
-                        });
-                    },
-                    cancel: function(){
-                        e.preventDefault();
-                    },
-                    always: function(){}
-                }
-            });
+    require([
+            'jquery',
+            'Magento_Ui/js/modal/confirm'
+        ],
+        $('#form-validate').on('submit', function (e){
+            e.preventDefault();
+            function($, confirmation) {
+
+                confirmation({
+                    title: $.mage.__('Confirmar exclusão'),
+                    content: $.mage.__('Todos os itens da mesma Ordem de Serviço serão excluidos. Deseja continuar?'),
+                    actions: {
+                        confirm: function() {
+                            $('#form-validate').append("<input type='hidden' name='update_cart_items' value='delete_items'")
+                            $('#form-validate').submit();
+                        },
+                        cancel: function(){
+                            alert('Cancelou');
+                        },
+                        always: function(){}
+                    };
+                });
+
+            };
         });
+    );
